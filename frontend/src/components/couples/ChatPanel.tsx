@@ -45,7 +45,7 @@ export default function ChatPanel({ coupleContext }: ChatPanelProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8001/api/v1/couples-chat", {
+      const response = await fetch("https://kuber-backend-fb4dbb569c44.herokuapp.com/api/v1/couples-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

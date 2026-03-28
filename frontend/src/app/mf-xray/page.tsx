@@ -48,7 +48,7 @@ export default function MFXRayPage() {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:8001/api/v1/mf-xray", {
+      const res = await fetch("https://kuber-backend-fb4dbb569c44.herokuapp.com/api/v1/mf-xray", {
         method: "POST",
         body: formData,
       });

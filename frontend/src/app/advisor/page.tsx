@@ -54,7 +54,7 @@ export default function AdvisorChat() {
         tax_regime: "unsure"
       };
 
-      const res = await fetch("http://localhost:8001/api/v1/chat", {
+      const res = await fetch("https://kuber-backend-fb4dbb569c44.herokuapp.com/api/v1/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage, history: messages, context: mockContext })

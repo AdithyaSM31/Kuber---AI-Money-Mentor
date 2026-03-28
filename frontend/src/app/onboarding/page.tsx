@@ -45,7 +45,7 @@ export default function Onboarding() {
         risk_appetite: "moderate"
       };
 
-      const res = await fetch("http://localhost:8001/api/v1/health-score", {
+      const res = await fetch("https://kuber-backend-fb4dbb569c44.herokuapp.com/api/v1/health-score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
