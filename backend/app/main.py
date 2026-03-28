@@ -25,22 +25,17 @@ def get_user_id(request: Request):
 
 limiter = Limiter(key_func=get_user_id)
 
-app = FastAPI(title="ET MoneyMind API")
-
-origins = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://kuber-ai-money-mentor.vercel.app",
-    "*"
-]
+app = FastAPI(title="Kuber AI API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)      
 
@@ -57,4 +52,9 @@ app.include_router(couples_chat.router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():
-    return {"status": "ok", "service": "ET MoneyMind Health Score API"}
+    return {"status": "ok", "service": "Kuber AI Money Mentor Backend ??"}
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", 8001))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
