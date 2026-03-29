@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 export default function AdvisorChat() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{role: 'user' | 'ai', content: string}[]>([
-    { role: 'ai', content: "Hello! I am **ET MoneyMind**. I have deep knowledge of Indian taxation, mutual funds, and your personal financial profile. What would you like to plan today?" }
+    { role: 'ai', content: "Hello! I am **Kuber - AI Money Mentor**. I have deep knowledge of Indian taxation, mutual funds, and your personal financial profile. What would you like to plan today?" }
   ]);
   const [loading, setLoading] = useState(false);
   const [agentLogs, setAgentLogs] = useState<{time: string, agent: string, action: string}[]>([]);
@@ -100,9 +100,8 @@ export default function AdvisorChat() {
       {/* Navbar Minimal */}
       <nav className="border-b border-zinc-800/80 p-4 flex justify-between items-center bg-zinc-950/80 backdrop-blur-md z-50 flex-none">
         <div className="text-xl font-black tracking-tighter flex items-center gap-2">
-          <span>ET</span>
-          <span className="text-emerald-400">MoneyMind</span>
-          <span className="ml-2 px-2 py-0.5 bg-zinc-800 text-[10px] text-zinc-400 rounded-sm uppercase tracking-widest font-mono border border-zinc-700">Phase 4 Alpha</span>
+          <span>Kuber</span>
+          <span className="text-emerald-400"> AI Money Mentor</span>
         </div>
         <Link href="/" className="text-xs font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors">
           Back to Home

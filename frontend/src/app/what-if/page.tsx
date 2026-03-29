@@ -72,8 +72,8 @@ export default function WhatIfSimulator() {
       />
       <nav className="border-b border-zinc-800/50 p-6 flex justify-between items-center backdrop-blur-md sticky top-0 z-50">
         <div className="text-2xl font-black tracking-tighter flex items-center gap-2">
-          <span>ET</span>
-          <span className="text-emerald-400">MoneyMind</span>
+          <span>Kuber</span>
+          <span className="text-emerald-400"> AI Money Mentor</span>
         </div>
         <Link href="/" className="text-xs font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors">
           Back to Home

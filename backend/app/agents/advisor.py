@@ -1,4 +1,4 @@
-﻿import os
+import os
 import json
 from groq import AsyncGroq
 import structlog
@@ -14,7 +14,7 @@ async def get_advisor_response(message: str, history: list = None, context_data:
         {"agent": "Advisor Agent", "action": "Formulating strategic, personalized response..."}
     ]
 
-    system_prompt = "You are an elite, highly intelligent financial AI advisor for Indian retail investors named ET MoneyMind. Limit prose, be direct, conversational, and use clean bullet points where appropriate. Always relate advice back to wealth creation."
+    system_prompt = "You are an elite, highly intelligent financial AI advisor for Indian retail investors named Kuber. Limit prose, be direct, conversational, and use clean bullet points where appropriate. Always relate advice back to wealth creation."
 
     if context_data:
         system_prompt += f"\n\nUSER FINANCIAL CONTEXT:\n{json.dumps(context_data)}"

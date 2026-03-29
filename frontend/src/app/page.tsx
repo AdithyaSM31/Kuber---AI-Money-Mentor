@@ -131,7 +131,7 @@ export default function LandingPage() {
       </main>
 
       <div className="border-t border-white/5 py-6 px-6 lg:px-10 flex justify-between text-xs font-mono text-zinc-600 uppercase tracking-widest mt-auto relative z-10 bg-zinc-950/80 backdrop-blur-sm">
-        <span>© 2026 ET MoneyMind</span>
+        <span>© 2026 Kuber - AI Money Mentor</span>
         <span>Secure. Encrypted. Private.</span>
       </div>
     </div>

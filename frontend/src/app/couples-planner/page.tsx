@@ -126,8 +126,7 @@ export default function CouplesPlanner() {
       
       <nav className="fixed top-0 w-full border-b border-zinc-800/80 p-4 flex justify-between items-center bg-zinc-950/80 backdrop-blur-md z-50">
         <div className="text-xl font-black tracking-tighter flex items-center gap-2">
-          <span>ET</span><span className="text-emerald-400">MoneyMind</span>
-          <span className="ml-2 px-2 py-0.5 bg-zinc-800 text-[10px] text-zinc-400 rounded-sm uppercase tracking-widest font-mono border border-zinc-700">Phase 5</span>
+          <span>Kuber</span><span className="text-emerald-400"> AI Money Mentor</span>
         </div>
         <Link href="/" className="text-xs font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors">Back to Home</Link>
       </nav>
