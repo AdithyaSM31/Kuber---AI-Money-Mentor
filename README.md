@@ -109,8 +109,16 @@ The Next.js frontend has been bridged using **Capacitor** to output a functional
    `npx cap open android`
 4. Use **Build -> Generate Signed Bundle / APK...** with the internal `/frontend/android/app/release.keystore` to generate an installable `app-release.apk`.
 
+## 👥 Contributors
+
+A massive shoutout to the team that helped build Kuber:
+- [Adithya (AdithyaSM31)](https://github.com/AdithyaSM31)
+- [Ashutosh Das (Cerberus727)](https://github.com/Cerberus727)
+- [Piyush Maurya (sick232)](https://github.com/sick232)
+- [Mayank Chauhan (SoldierOp)](https://github.com/SoldierOp)
+
 ## 📝 License
-Developed with ♥ by Adithya as an AI financial literacy project.
+Developed with ♥ by Team 722 as an AI financial literacy project.
 
 ## 📜 Build Process and History
 
