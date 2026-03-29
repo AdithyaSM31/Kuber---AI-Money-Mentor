@@ -93,3 +93,22 @@ The backend utilizes a `Procfile` mapping the port specifically for Heroku dynos
 
 ## 📝 License
 Developed with ♥ by Adithya as an AI financial literacy project.
+
+## 📜 Build Process and History
+
+* **2026-03-29** - rebrand: replace ET MoneyMind with Kuber - AI Money Mentor across all pages and backend
+* **2026-03-29** - fix: pass real computed tax data to couples planner chat instead of hardcoded zeros
+* **2026-03-28** - Add initial README with project overview and setup
+* **2026-03-28** - Fix UTF-16 null byte corruption in backend/requirements.txt caused by PowerShell echo
+* **2026-03-28** - Fix Heroku ModuleNotFoundError crasher by adding missing dependencies: slowapi, structlog, pypdf, python-multipart
+* **2026-03-28** - Fix Procfile for Heroku H10 Crash: Change execution to Gunicorn/Uvicorn binding to 0.0.0.0 explicitely with injected Heroku PORT
+* **2026-03-28** - Fix Heroku application crash by removing bash variable interpolation from Procfile and natively binding port inside python
+* **2026-03-28** - Fix Heroku dynamic port binding
+* **2026-03-28** - Configure exact origins just in case
+* **2026-03-28** - Fix CORS configuration by disabling credentials to allow wildcard origins
+* **2026-03-28** - Attempt completely permissive CORS
+* **2026-03-28** - Add Vercel domain to backend CORS allowed origins
+* **2026-03-28** - Add .python-version to resolve PyO3 Rust build issues with Python 3.14 on Heroku
+* **2026-03-28** - Update frontend API endpoints to use deployed Heroku backend URL
+* **2026-03-28** - Add Heroku config files
+* **2026-03-28** - Initialize project: Kuber - AI Money Mentor (Frontend and Backend) without sensitive details
