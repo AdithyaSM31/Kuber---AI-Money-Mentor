@@ -1,6 +1,6 @@
-<p align="center"><img src="./kuber.png" alt="Kuber Logo" width="150" /></p>
-
 # Kuber - AI Money Mentor
+
+<p align="center"><img src="./kuber.png" alt="Kuber Logo" width="400" /></p>
 
 Kuber is a comprehensive, AI-powered financial advisory platform designed to provide personalized wealth management, mutual fund analysis, tax planning, and future projections. It features specialized intelligent agents to guide users through their financial journey using the power of Llama 3 models via Groq.
 
