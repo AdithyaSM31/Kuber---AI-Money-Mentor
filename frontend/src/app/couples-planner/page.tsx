@@ -1,21 +1,68 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
-import { Heart, Home, TrendingUp, Link as LinkIcon, RefreshCcw, ShieldCheck } from "lucide-react";
+import { Heart, Home, TrendingUp, Link as LinkIcon, RefreshCcw, ShieldCheck, UserCircle } from "lucide-react";
 import ChatPanel from "@/components/couples/ChatPanel";
 
+// Indian tax slab calculators for FY 2025-26
+function calcTaxOldRegime(income: number): number {
+  // Standard deduction ₹50,000
+  const taxable = Math.max(0, income - 50000);
+  let tax = 0;
+  if (taxable > 1000000) tax += (taxable - 1000000) * 0.30;
+  if (taxable > 500000) tax += Math.min(taxable - 500000, 500000) * 0.20;
+  if (taxable > 250000) tax += Math.min(taxable - 250000, 250000) * 0.05;
+  // 4% cess
+  return Math.round(tax * 1.04);
+}
+
+function calcTaxNewRegime(income: number): number {
+  // Standard deduction ₹75,000 under new regime FY 2025-26
+  const taxable = Math.max(0, income - 75000);
+  let tax = 0;
+  // New regime slabs FY 2025-26
+  const slabs = [
+    { limit: 400000, rate: 0 },
+    { limit: 800000, rate: 0.05 },
+    { limit: 1200000, rate: 0.10 },
+    { limit: 1600000, rate: 0.15 },
+    { limit: 2000000, rate: 0.20 },
+    { limit: 2400000, rate: 0.25 },
+    { limit: Infinity, rate: 0.30 },
+  ];
+  let remaining = taxable;
+  let prev = 0;
+  for (const slab of slabs) {
+    const slabWidth = slab.limit - prev;
+    const taxableInSlab = Math.min(remaining, slabWidth);
+    tax += taxableInSlab * slab.rate;
+    remaining -= taxableInSlab;
+    prev = slab.limit;
+    if (remaining <= 0) break;
+  }
+  // Rebate u/s 87A: no tax if taxable income ≤ ₹12L under new regime
+  if (taxable <= 1200000) tax = 0;
+  // 4% cess
+  return Math.round(tax * 1.04);
+}
+
 export default function CouplesPlanner() {
+  const [p1Name, setP1Name] = useState("Partner 1");
+  const [p2Name, setP2Name] = useState("Partner 2");
   const [partner1, setPartner1] = useState(1200000);
   const [partner2, setPartner2] = useState(900000);
+  const [p1Regime, setP1Regime] = useState<"Old" | "New">("New");
+  const [p2Regime, setP2Regime] = useState<"Old" | "New">("New");
   const [rent, setRent] = useState(40000);
   const [results, setResults] = useState<any>(null);
 
+  // Compute tax payable dynamically based on income and selected regime
+  const p1Tax = useMemo(() => p1Regime === "Old" ? calcTaxOldRegime(partner1) : calcTaxNewRegime(partner1), [partner1, p1Regime]);
+  const p2Tax = useMemo(() => p2Regime === "Old" ? calcTaxOldRegime(partner2) : calcTaxNewRegime(partner2), [partner2, p2Regime]);
+
   const optimize = () => {
-    // Basic HRA/Tax Arbitrage Calculation
-    // Assuming New Regime rates for simplicity, or just a rough bracket match
-    // Bracket estimation
     const getTaxRate = (income: number) => {
       if (income > 1500000) return 0.3;
       if (income > 1200000) return 0.2;
@@ -27,32 +74,24 @@ export default function CouplesPlanner() {
     const rate1 = getTaxRate(partner1);
     const rate2 = getTaxRate(partner2);
 
-    // If one is in a higher tax bracket, they should claim more of the rent for HRA exemption.
-    // Simplifying HRA exemption as the lower of (Rent - 10% basic), etc. We will mock the optimization conceptually with real scaling:
-    // If rate1 > rate2, P1 should claim 100% of rent if allowed, or split proportionally if both need deduction.
-
     let p1Share = 0.5;
     let p2Share = 0.5;
     let strategy = 'Split Equally';
 
     if (rate1 > rate2) {
-      // P1 has higher tax rate, shift more rent to P1
-      p1Share = 0.8; // Not 100% just to be realistic with partial rent receipts
+      p1Share = 0.8;
       p2Share = 0.2;
-      strategy = 'Shift to Partner 1';
+      strategy = `Shift to ${p1Name}`;
     } else if (rate2 > rate1) {
-      // P2 has higher tax rate
       p1Share = 0.2;
       p2Share = 0.8;
-      strategy = 'Shift to Partner 2';
+      strategy = `Shift to ${p2Name}`;
     }
 
     const annualRent = rent * 12;
     const p1RentClaim = annualRent * p1Share;
     const p2RentClaim = annualRent * p2Share;
 
-    // Estimated tax saving is roughly the HRA exemption * tax rate.
-    // Assuming 50% of claimed rent becomes exempt for the sake of the formula:
     const p1TaxSaving = (p1RentClaim * 0.5) * rate1;
     const p2TaxSaving = (p2RentClaim * 0.5) * rate2;
 
@@ -66,6 +105,20 @@ export default function CouplesPlanner() {
       strategy
     });
   };
+
+  // Build the real couple context for the AI chat
+  const coupleContext = useMemo(() => ({
+    partner1: { name: p1Name || "Partner 1", annual_income: partner1, tax_payable: p1Tax, regime: p1Regime },
+    partner2: { name: p2Name || "Partner 2", annual_income: partner2, tax_payable: p2Tax, regime: p2Regime },
+    household: {
+      monthly_rent: rent,
+      annual_rent: rent * 12,
+      combined_annual_income: partner1 + partner2,
+      combined_tax_payable: p1Tax + p2Tax,
+      combined_savings: results?.totalSaving || 0,
+      recommended_hra_claimant: results?.strategy || "Not yet calculated"
+    }
+  }), [p1Name, p2Name, partner1, partner2, p1Tax, p2Tax, p1Regime, p2Regime, rent, results]);
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white font-sans selection:bg-emerald-500/30 relative pt-20 pb-20">
@@ -94,14 +147,46 @@ export default function CouplesPlanner() {
            <div className="grid md:grid-cols-2 gap-8">
              <div className="space-y-6">
                 <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-950/50 shadow-inner">
-                  <label className="text-xs text-zinc-400 font-mono tracking-widest uppercase mb-3 block">Partner 1 Annual Income</label>
+                  <div className="flex items-center gap-2 mb-3">
+                    <UserCircle className="w-4 h-4 text-rose-400" />
+                    <input
+                      type="text"
+                      value={p1Name}
+                      onChange={e => setP1Name(e.target.value)}
+                      placeholder="Partner 1 Name"
+                      className="bg-transparent border-b border-zinc-700 focus:border-rose-400 text-sm text-white font-semibold outline-none pb-1 w-full transition-colors"
+                    />
+                  </div>
+                  <label className="text-xs text-zinc-400 font-mono tracking-widest uppercase mb-3 block">Annual Income</label>
                   <input type="range" min="300000" max="5000000" step="100000" value={partner1} onChange={e=>setPartner1(Number(e.target.value))} className="w-full accent-rose-400 mb-2" />
                   <p className="text-3xl font-black text-white">₹{partner1.toLocaleString('en-IN')}</p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <span className="text-xs text-zinc-500 font-mono">Regime:</span>
+                    <button onClick={() => setP1Regime("Old")} className={cn("px-3 py-1 rounded-md text-xs font-bold transition-all", p1Regime === "Old" ? "bg-rose-500/20 text-rose-400 border border-rose-500/40" : "bg-zinc-800 text-zinc-500 border border-zinc-700 hover:text-zinc-300")}>Old</button>
+                    <button onClick={() => setP1Regime("New")} className={cn("px-3 py-1 rounded-md text-xs font-bold transition-all", p1Regime === "New" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40" : "bg-zinc-800 text-zinc-500 border border-zinc-700 hover:text-zinc-300")}>New</button>
+                    <span className="text-xs text-zinc-400 ml-auto">Tax: <span className="text-white font-bold">₹{p1Tax.toLocaleString('en-IN')}</span></span>
+                  </div>
                 </div>
                 <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-950/50 shadow-inner">
-                  <label className="text-xs text-zinc-400 font-mono tracking-widest uppercase mb-3 block">Partner 2 Annual Income</label>
+                  <div className="flex items-center gap-2 mb-3">
+                    <UserCircle className="w-4 h-4 text-emerald-400" />
+                    <input
+                      type="text"
+                      value={p2Name}
+                      onChange={e => setP2Name(e.target.value)}
+                      placeholder="Partner 2 Name"
+                      className="bg-transparent border-b border-zinc-700 focus:border-emerald-400 text-sm text-white font-semibold outline-none pb-1 w-full transition-colors"
+                    />
+                  </div>
+                  <label className="text-xs text-zinc-400 font-mono tracking-widest uppercase mb-3 block">Annual Income</label>
                   <input type="range" min="300000" max="5000000" step="100000" value={partner2} onChange={e=>setPartner2(Number(e.target.value))} className="w-full accent-emerald-400 mb-2" />
                   <p className="text-3xl font-black text-white">₹{partner2.toLocaleString('en-IN')}</p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <span className="text-xs text-zinc-500 font-mono">Regime:</span>
+                    <button onClick={() => setP2Regime("Old")} className={cn("px-3 py-1 rounded-md text-xs font-bold transition-all", p2Regime === "Old" ? "bg-rose-500/20 text-rose-400 border border-rose-500/40" : "bg-zinc-800 text-zinc-500 border border-zinc-700 hover:text-zinc-300")}>Old</button>
+                    <button onClick={() => setP2Regime("New")} className={cn("px-3 py-1 rounded-md text-xs font-bold transition-all", p2Regime === "New" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40" : "bg-zinc-800 text-zinc-500 border border-zinc-700 hover:text-zinc-300")}>New</button>
+                    <span className="text-xs text-zinc-400 ml-auto">Tax: <span className="text-white font-bold">₹{p2Tax.toLocaleString('en-IN')}</span></span>
+                  </div>
                 </div>
              </div>
              
@@ -129,12 +214,12 @@ export default function CouplesPlanner() {
                    
                    <div className="flex items-end gap-6 relative z-10">
                       <div className="flex-1 bg-zinc-950/80 p-5 rounded-xl border border-zinc-800 shadow-inner">
-                         <p className="text-xs text-zinc-500 mb-2">Partner 1 pays</p>
+                         <p className="text-xs text-zinc-500 mb-2">{p1Name} pays</p>
                          <p className="text-2xl font-black text-white">₹{results.rentSplit.p1.toLocaleString('en-IN')}</p>
                          <div className="mt-2 w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden"><div className="bg-rose-400 h-full" style={{ width: `${(results.rentSplit.p1 / rent) * 100}%` }}></div></div>
                       </div>
                       <div className="flex-1 bg-zinc-950/80 p-5 rounded-xl border border-zinc-800 shadow-inner">
-                         <p className="text-xs text-zinc-500 mb-2">Partner 2 pays</p>
+                         <p className="text-xs text-zinc-500 mb-2">{p2Name} pays</p>
                          <p className="text-2xl font-black text-white">₹{results.rentSplit.p2.toLocaleString('en-IN')}</p>
                          <div className="mt-2 w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden"><div className="bg-emerald-400 h-full" style={{ width: `${(results.rentSplit.p2 / rent) * 100}%` }}></div></div>
                       </div>
@@ -155,13 +240,7 @@ export default function CouplesPlanner() {
           </div>
         )}
       </div>
-      <ChatPanel 
-        coupleContext={{ 
-          partner1: { name: "User", annual_income: partner1, tax_payable: 0, regime: "New" }, 
-          partner2: { name: "Spouse", annual_income: partner2, tax_payable: 0, regime: "New" }, 
-          household: { combined_savings: results?.totalSaving || 0, recommended_hra_claimant: results?.strategy || "Unknown" } 
-        }} 
-      />
+      <ChatPanel coupleContext={coupleContext} />
     </div>
   );
 }
