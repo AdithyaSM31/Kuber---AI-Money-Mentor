@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 export default function LandingPage() {
   return (
@@ -21,9 +22,7 @@ export default function LandingPage() {
       
       <header className="flex items-center justify-between p-6 lg:p-10 border-b border-white/10 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)] font-bold text-emerald-400">
-            K
-          </div>
+          <Image src="/kuber.png" alt="Kuber Logo" width={32} height={32} className="rounded-full rounded-tl-sm object-cover shadow-[0_0_15px_rgba(16,185,129,0.3)]" />
           <span className="text-sm font-bold tracking-widest uppercase">KUBER - AI MONEY MENTOR</span>
         </div>
         <nav className="hidden md:flex items-center gap-8 text-xs font-mono tracking-widest text-zinc-400">

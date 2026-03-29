@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import Link from "next/link";
 import { Slider } from "@/components/ui/slider";
+import Image from "next/image";
 
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
@@ -72,6 +73,7 @@ export default function WhatIfSimulator() {
       />
       <nav className="border-b border-zinc-800/50 p-6 flex justify-between items-center backdrop-blur-md sticky top-0 z-50">
         <div className="text-2xl font-black tracking-tighter flex items-center gap-2">
+          <Image src="/kuber.png" alt="Kuber Logo" width={32} height={32} className="rounded-full rounded-tl-sm object-cover" />
           <span>Kuber</span>
           <span className="text-emerald-400"> AI Money Mentor</span>
         </div>

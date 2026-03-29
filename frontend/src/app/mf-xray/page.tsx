@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { UploadCloud, FileText, ArrowRight, Loader2, Target, AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const COLORS = ['#22c55e', '#3b82f6', '#f59e0b', '#a855f7', '#ec4899', '#ef4444'];
 
@@ -102,6 +103,7 @@ export default function MFXRayPage() {
       {/* Navbar Minimal */}
       <nav className="border-b border-zinc-800/50 p-6 flex justify-between items-center backdrop-blur-md sticky top-0 z-50">
         <div className="text-2xl font-black tracking-tighter flex items-center gap-2">
+          <Image src="/kuber.png" alt="Kuber Logo" width={32} height={32} className="rounded-full rounded-tl-sm object-cover" />
           <span>Kuber</span>
           <span className="text-emerald-400"> AI Money Mentor</span>
         </div>

@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function AdvisorChat() {
   const [input, setInput] = useState("");
@@ -100,6 +101,7 @@ export default function AdvisorChat() {
       {/* Navbar Minimal */}
       <nav className="border-b border-zinc-800/80 p-4 flex justify-between items-center bg-zinc-950/80 backdrop-blur-md z-50 flex-none">
         <div className="text-xl font-black tracking-tighter flex items-center gap-2">
+          <Image src="/kuber.png" alt="Kuber Logo" width={32} height={32} className="rounded-full rounded-tl-sm object-cover" />
           <span>Kuber</span>
           <span className="text-emerald-400"> AI Money Mentor</span>
         </div>

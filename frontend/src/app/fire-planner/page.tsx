@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { Calculator, TrendingUp, IndianRupee, Target } from "lucide-react";
 
 export default function FIREPlanner() {
@@ -54,6 +55,7 @@ export default function FIREPlanner() {
       
       <nav className="fixed top-0 w-full border-b border-zinc-800/80 p-4 flex justify-between items-center bg-zinc-950/80 backdrop-blur-md z-50">
         <div className="text-xl font-black tracking-tighter flex items-center gap-2">
+          <Image src="/kuber.png" alt="Kuber Logo" width={32} height={32} className="rounded-full rounded-tl-sm object-cover" />
           <span>Kuber</span><span className="text-emerald-400"> AI Money Mentor</span>
         </div>
         <Link href="/" className="text-xs font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors">Back to Home</Link>
